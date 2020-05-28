@@ -1,0 +1,981 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- 
+This manual (8 May 2020) is for GNU Bison (version 3.6),
+the GNU parser generator.
+
+Copyright (C) 1988-1993, 1995, 1998-2015, 2018-2020 Free
+Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document under
+the terms of the GNU Free Documentation License, Version 1.3 or any later
+version published by the Free Software Foundation; with no Invariant
+Sections, with the Front-Cover texts being "A GNU Manual," and with the
+Back-Cover Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and modify
+this GNU manual.  Buying copies from the FSF supports it in developing GNU
+and promoting software freedom." -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Top (Bison 3.6)</title>
+
+<meta name="description" content="Top (Bison 3.6)">
+<meta name="keywords" content="Top (Bison 3.6)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="#Top" rel="start" title="Top">
+<link href="Index-of-Terms.html" rel="index" title="Index of Terms">
+<link href="#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="/manual" rel="up" title="(dir)">
+<link href="Introduction.html" rel="next" title="Introduction">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<h1 class="settitle" align="center">Bison 3.6</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span id="SEC_Contents"></span>
+<h2 class="contents-heading">Table of Contents</h2>
+
+<div class="contents">
+
+<ul class="no-bullet">
+  <li><a id="toc-Introduction-1" href="Introduction.html#Introduction">Introduction</a></li>
+  <li><a id="toc-Conditions-for-Using-Bison" href="Conditions.html#Conditions">Conditions for Using Bison</a></li>
+  <li><a id="toc-GNU-GENERAL-PUBLIC-LICENSE" href="Copying.html#Copying">GNU GENERAL PUBLIC LICENSE</a></li>
+  <li><a id="toc-The-Concepts-of-Bison" href="Concepts.html#Concepts">1 The Concepts of Bison</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Languages-and-Context_002dFree-Grammars" href="Language-and-Grammar.html#Language-and-Grammar">1.1 Languages and Context-Free Grammars</a></li>
+    <li><a id="toc-From-Formal-Rules-to-Bison-Input" href="Grammar-in-Bison.html#Grammar-in-Bison">1.2 From Formal Rules to Bison Input</a></li>
+    <li><a id="toc-Semantic-Values-1" href="Semantic-Values.html#Semantic-Values">1.3 Semantic Values</a></li>
+    <li><a id="toc-Semantic-Actions-1" href="Semantic-Actions.html#Semantic-Actions">1.4 Semantic Actions</a></li>
+    <li><a id="toc-Writing-GLR-Parsers" href="GLR-Parsers.html#GLR-Parsers">1.5 Writing GLR Parsers</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Using-GLR-on-Unambiguous-Grammars" href="Simple-GLR-Parsers.html#Simple-GLR-Parsers">1.5.1 Using GLR on Unambiguous Grammars</a></li>
+      <li><a id="toc-Using-GLR-to-Resolve-Ambiguities" href="Merging-GLR-Parses.html#Merging-GLR-Parses">1.5.2 Using GLR to Resolve Ambiguities</a></li>
+      <li><a id="toc-GLR-Semantic-Actions-1" href="GLR-Semantic-Actions.html#GLR-Semantic-Actions">1.5.3 GLR Semantic Actions</a>
+      <ul class="no-bullet">
+        <li><a id="toc-Deferred-semantic-actions" href="GLR-Semantic-Actions.html#Deferred-semantic-actions">1.5.3.1 Deferred semantic actions</a></li>
+        <li><a id="toc-YYERROR" href="GLR-Semantic-Actions.html#YYERROR">1.5.3.2 YYERROR</a></li>
+        <li><a id="toc-Restrictions-on-semantic-values-and-locations" href="GLR-Semantic-Actions.html#Restrictions-on-semantic-values-and-locations">1.5.3.3 Restrictions on semantic values and locations</a></li>
+      </ul></li>
+      <li><a id="toc-Controlling-a-Parse-with-Arbitrary-Predicates" href="Semantic-Predicates.html#Semantic-Predicates">1.5.4 Controlling a Parse with Arbitrary Predicates</a></li>
+      <li><a id="toc-Considerations-when-Compiling-GLR-Parsers" href="Compiler-Requirements-for-GLR.html#Compiler-Requirements-for-GLR">1.5.5 Considerations when Compiling GLR Parsers</a></li>
+    </ul></li>
+    <li><a id="toc-Locations-1" href="Locations.html#Locations">1.6 Locations</a></li>
+    <li><a id="toc-Bison-Output_003a-the-Parser-Implementation-File" href="Bison-Parser.html#Bison-Parser">1.7 Bison Output: the Parser Implementation File</a></li>
+    <li><a id="toc-Stages-in-Using-Bison" href="Stages.html#Stages">1.8 Stages in Using Bison</a></li>
+    <li><a id="toc-The-Overall-Layout-of-a-Bison-Grammar" href="Grammar-Layout.html#Grammar-Layout">1.9 The Overall Layout of a Bison Grammar</a></li>
+  </ul></li>
+  <li><a id="toc-Examples-1" href="Examples.html#Examples">2 Examples</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Reverse-Polish-Notation-Calculator" href="RPN-Calc.html#RPN-Calc">2.1 Reverse Polish Notation Calculator</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Declarations-for-rpcalc" href="Rpcalc-Declarations.html#Rpcalc-Declarations">2.1.1 Declarations for <code>rpcalc</code></a></li>
+      <li><a id="toc-Grammar-Rules-for-rpcalc" href="Rpcalc-Rules.html#Rpcalc-Rules">2.1.2 Grammar Rules for <code>rpcalc</code></a>
+      <ul class="no-bullet">
+        <li><a id="toc-Explanation-of-input" href="Rpcalc-Input.html#Rpcalc-Input">2.1.2.1 Explanation of <code>input</code></a></li>
+        <li><a id="toc-Explanation-of-line" href="Rpcalc-Line.html#Rpcalc-Line">2.1.2.2 Explanation of <code>line</code></a></li>
+        <li><a id="toc-Explanation-of-expr" href="Rpcalc-Expr.html#Rpcalc-Expr">2.1.2.3 Explanation of <code>expr</code></a></li>
+      </ul></li>
+      <li><a id="toc-The-rpcalc-Lexical-Analyzer" href="Rpcalc-Lexer.html#Rpcalc-Lexer">2.1.3 The <code>rpcalc</code> Lexical Analyzer</a></li>
+      <li><a id="toc-The-Controlling-Function" href="Rpcalc-Main.html#Rpcalc-Main">2.1.4 The Controlling Function</a></li>
+      <li><a id="toc-The-Error-Reporting-Routine" href="Rpcalc-Error.html#Rpcalc-Error">2.1.5 The Error Reporting Routine</a></li>
+      <li><a id="toc-Running-Bison-to-Make-the-Parser" href="Rpcalc-Generate.html#Rpcalc-Generate">2.1.6 Running Bison to Make the Parser</a></li>
+      <li><a id="toc-Compiling-the-Parser-Implementation-File" href="Rpcalc-Compile.html#Rpcalc-Compile">2.1.7 Compiling the Parser Implementation File</a></li>
+    </ul></li>
+    <li><a id="toc-Infix-Notation-Calculator_003a-calc" href="Infix-Calc.html#Infix-Calc">2.2 Infix Notation Calculator: <code>calc</code></a></li>
+    <li><a id="toc-Simple-Error-Recovery-1" href="Simple-Error-Recovery.html#Simple-Error-Recovery">2.3 Simple Error Recovery</a></li>
+    <li><a id="toc-Location-Tracking-Calculator_003a-ltcalc" href="Location-Tracking-Calc.html#Location-Tracking-Calc">2.4 Location Tracking Calculator: <code>ltcalc</code></a>
+    <ul class="no-bullet">
+      <li><a id="toc-Declarations-for-ltcalc" href="Ltcalc-Declarations.html#Ltcalc-Declarations">2.4.1 Declarations for <code>ltcalc</code></a></li>
+      <li><a id="toc-Grammar-Rules-for-ltcalc" href="Ltcalc-Rules.html#Ltcalc-Rules">2.4.2 Grammar Rules for <code>ltcalc</code></a></li>
+      <li><a id="toc-The-ltcalc-Lexical-Analyzer_002e" href="Ltcalc-Lexer.html#Ltcalc-Lexer">2.4.3 The <code>ltcalc</code> Lexical Analyzer.</a></li>
+    </ul></li>
+    <li><a id="toc-Multi_002dFunction-Calculator_003a-mfcalc" href="Multi_002dfunction-Calc.html#Multi_002dfunction-Calc">2.5 Multi-Function Calculator: <code>mfcalc</code></a>
+    <ul class="no-bullet">
+      <li><a id="toc-Declarations-for-mfcalc" href="Mfcalc-Declarations.html#Mfcalc-Declarations">2.5.1 Declarations for <code>mfcalc</code></a></li>
+      <li><a id="toc-Grammar-Rules-for-mfcalc" href="Mfcalc-Rules.html#Mfcalc-Rules">2.5.2 Grammar Rules for <code>mfcalc</code></a></li>
+      <li><a id="toc-The-mfcalc-Symbol-Table" href="Mfcalc-Symbol-Table.html#Mfcalc-Symbol-Table">2.5.3 The <code>mfcalc</code> Symbol Table</a></li>
+      <li><a id="toc-The-mfcalc-Lexer" href="Mfcalc-Lexer.html#Mfcalc-Lexer">2.5.4 The <code>mfcalc</code> Lexer</a></li>
+      <li><a id="toc-The-mfcalc-Main" href="Mfcalc-Main.html#Mfcalc-Main">2.5.5 The <code>mfcalc</code> Main</a></li>
+    </ul></li>
+    <li><a id="toc-Exercises-1" href="Exercises.html#Exercises">2.6 Exercises</a></li>
+  </ul></li>
+  <li><a id="toc-Bison-Grammar-Files" href="Grammar-File.html#Grammar-File">3 Bison Grammar Files</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Outline-of-a-Bison-Grammar" href="Grammar-Outline.html#Grammar-Outline">3.1 Outline of a Bison Grammar</a>
+    <ul class="no-bullet">
+      <li><a id="toc-The-prologue" href="Prologue.html#Prologue">3.1.1 The prologue</a></li>
+      <li><a id="toc-Prologue-Alternatives-1" href="Prologue-Alternatives.html#Prologue-Alternatives">3.1.2 Prologue Alternatives</a></li>
+      <li><a id="toc-The-Bison-Declarations-Section" href="Bison-Declarations.html#Bison-Declarations">3.1.3 The Bison Declarations Section</a></li>
+      <li><a id="toc-The-Grammar-Rules-Section" href="Grammar-Rules.html#Grammar-Rules">3.1.4 The Grammar Rules Section</a></li>
+      <li><a id="toc-The-epilogue" href="Epilogue.html#Epilogue">3.1.5 The epilogue</a></li>
+    </ul></li>
+    <li><a id="toc-Symbols_002c-Terminal-and-Nonterminal" href="Symbols.html#Symbols">3.2 Symbols, Terminal and Nonterminal</a></li>
+    <li><a id="toc-Grammar-Rules-1" href="Rules.html#Rules">3.3 Grammar Rules</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Syntax-of-Grammar-Rules" href="Rules-Syntax.html#Rules-Syntax">3.3.1 Syntax of Grammar Rules</a></li>
+      <li><a id="toc-Empty-Rules-1" href="Empty-Rules.html#Empty-Rules">3.3.2 Empty Rules</a></li>
+      <li><a id="toc-Recursive-Rules" href="Recursion.html#Recursion">3.3.3 Recursive Rules</a></li>
+    </ul></li>
+    <li><a id="toc-Defining-Language-Semantics" href="Semantics.html#Semantics">3.4 Defining Language Semantics</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Data-Types-of-Semantic-Values" href="Value-Type.html#Value-Type">3.4.1 Data Types of Semantic Values</a></li>
+      <li><a id="toc-More-Than-One-Value-Type" href="Multiple-Types.html#Multiple-Types">3.4.2 More Than One Value Type</a></li>
+      <li><a id="toc-Generating-the-Semantic-Value-Type" href="Type-Generation.html#Type-Generation">3.4.3 Generating the Semantic Value Type</a></li>
+      <li><a id="toc-The-Union-Declaration" href="Union-Decl.html#Union-Decl">3.4.4 The Union Declaration</a></li>
+      <li><a id="toc-Providing-a-Structured-Semantic-Value-Type" href="Structured-Value-Type.html#Structured-Value-Type">3.4.5 Providing a Structured Semantic Value Type</a></li>
+      <li><a id="toc-Actions-1" href="Actions.html#Actions">3.4.6 Actions</a></li>
+      <li><a id="toc-Data-Types-of-Values-in-Actions" href="Action-Types.html#Action-Types">3.4.7 Data Types of Values in Actions</a></li>
+      <li><a id="toc-Actions-in-Midrule" href="Midrule-Actions.html#Midrule-Actions">3.4.8 Actions in Midrule</a>
+      <ul class="no-bullet">
+        <li><a id="toc-Using-Midrule-Actions-1" href="Using-Midrule-Actions.html#Using-Midrule-Actions">3.4.8.1 Using Midrule Actions</a></li>
+        <li><a id="toc-Typed-Midrule-Actions-1" href="Typed-Midrule-Actions.html#Typed-Midrule-Actions">3.4.8.2 Typed Midrule Actions</a></li>
+        <li><a id="toc-Midrule-Action-Translation-1" href="Midrule-Action-Translation.html#Midrule-Action-Translation">3.4.8.3 Midrule Action Translation</a></li>
+        <li><a id="toc-Conflicts-due-to-Midrule-Actions" href="Midrule-Conflicts.html#Midrule-Conflicts">3.4.8.4 Conflicts due to Midrule Actions</a></li>
+      </ul></li>
+    </ul></li>
+    <li><a id="toc-Tracking-Locations-1" href="Tracking-Locations.html#Tracking-Locations">3.5 Tracking Locations</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Data-Type-of-Locations" href="Location-Type.html#Location-Type">3.5.1 Data Type of Locations</a></li>
+      <li><a id="toc-Actions-and-Locations-1" href="Actions-and-Locations.html#Actions-and-Locations">3.5.2 Actions and Locations</a></li>
+      <li><a id="toc-Default-Action-for-Locations" href="Location-Default-Action.html#Location-Default-Action">3.5.3 Default Action for Locations</a></li>
+    </ul></li>
+    <li><a id="toc-Named-References-1" href="Named-References.html#Named-References">3.6 Named References</a></li>
+    <li><a id="toc-Bison-Declarations-1" href="Declarations.html#Declarations">3.7 Bison Declarations</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Require-a-Version-of-Bison" href="Require-Decl.html#Require-Decl">3.7.1 Require a Version of Bison</a></li>
+      <li><a id="toc-Token-Kind-Names" href="Token-Decl.html#Token-Decl">3.7.2 Token Kind Names</a></li>
+      <li><a id="toc-Operator-Precedence" href="Precedence-Decl.html#Precedence-Decl">3.7.3 Operator Precedence</a></li>
+      <li><a id="toc-Nonterminal-Symbols" href="Type-Decl.html#Type-Decl">3.7.4 Nonterminal Symbols</a></li>
+      <li><a id="toc-Syntax-of-Symbol-Declarations" href="Symbol-Decls.html#Symbol-Decls">3.7.5 Syntax of Symbol Declarations</a></li>
+      <li><a id="toc-Performing-Actions-before-Parsing" href="Initial-Action-Decl.html#Initial-Action-Decl">3.7.6 Performing Actions before Parsing</a></li>
+      <li><a id="toc-Freeing-Discarded-Symbols" href="Destructor-Decl.html#Destructor-Decl">3.7.7 Freeing Discarded Symbols</a></li>
+      <li><a id="toc-Printing-Semantic-Values" href="Printer-Decl.html#Printer-Decl">3.7.8 Printing Semantic Values</a></li>
+      <li><a id="toc-Suppressing-Conflict-Warnings" href="Expect-Decl.html#Expect-Decl">3.7.9 Suppressing Conflict Warnings</a></li>
+      <li><a id="toc-The-Start_002dSymbol" href="Start-Decl.html#Start-Decl">3.7.10 The Start-Symbol</a></li>
+      <li><a id="toc-A-Pure-_0028Reentrant_0029-Parser" href="Pure-Decl.html#Pure-Decl">3.7.11 A Pure (Reentrant) Parser</a></li>
+      <li><a id="toc-A-Push-Parser" href="Push-Decl.html#Push-Decl">3.7.12 A Push Parser</a></li>
+      <li><a id="toc-Bison-Declaration-Summary" href="Decl-Summary.html#Decl-Summary">3.7.13 Bison Declaration Summary</a></li>
+      <li><a id="toc-_0025define-Summary-1" href="_0025define-Summary.html#g_t_0025define-Summary">3.7.14 %define Summary</a></li>
+      <li><a id="toc-_0025code-Summary-1" href="_0025code-Summary.html#g_t_0025code-Summary">3.7.15 %code Summary</a></li>
+    </ul></li>
+    <li><a id="toc-Multiple-Parsers-in-the-Same-Program" href="Multiple-Parsers.html#Multiple-Parsers">3.8 Multiple Parsers in the Same Program</a></li>
+  </ul></li>
+  <li><a id="toc-Parser-C_002dLanguage-Interface" href="Interface.html#Interface">4 Parser C-Language Interface</a>
+  <ul class="no-bullet">
+    <li><a id="toc-The-Parser-Function-yyparse" href="Parser-Function.html#Parser-Function">4.1 The Parser Function <code>yyparse</code></a></li>
+    <li><a id="toc-Push-Parser-Interface-1" href="Push-Parser-Interface.html#Push-Parser-Interface">4.2 Push Parser Interface</a></li>
+    <li><a id="toc-The-Lexical-Analyzer-Function-yylex" href="Lexical.html#Lexical">4.3 The Lexical Analyzer Function <code>yylex</code></a>
+    <ul class="no-bullet">
+      <li><a id="toc-Calling-Convention-for-yylex" href="Calling-Convention.html#Calling-Convention">4.3.1 Calling Convention for <code>yylex</code></a></li>
+      <li><a id="toc-Special-Tokens-1" href="Special-Tokens.html#Special-Tokens">4.3.2 Special Tokens</a></li>
+      <li><a id="toc-Finding-Tokens-by-String-Literals" href="Tokens-from-Literals.html#Tokens-from-Literals">4.3.3 Finding Tokens by String Literals</a></li>
+      <li><a id="toc-Semantic-Values-of-Tokens" href="Token-Values.html#Token-Values">4.3.4 Semantic Values of Tokens</a></li>
+      <li><a id="toc-Textual-Locations-of-Tokens" href="Token-Locations.html#Token-Locations">4.3.5 Textual Locations of Tokens</a></li>
+      <li><a id="toc-Calling-Conventions-for-Pure-Parsers" href="Pure-Calling.html#Pure-Calling">4.3.6 Calling Conventions for Pure Parsers</a></li>
+    </ul></li>
+    <li><a id="toc-Error-Reporting-1" href="Error-Reporting.html#Error-Reporting">4.4 Error Reporting</a>
+    <ul class="no-bullet">
+      <li><a id="toc-The-Error-Reporting-Function-yyerror" href="Error-Reporting-Function.html#Error-Reporting-Function">4.4.1 The Error Reporting Function <code>yyerror</code></a></li>
+      <li><a id="toc-The-Syntax-Error-Reporting-Function-yyreport_005fsyntax_005ferror" href="Syntax-Error-Reporting-Function.html#Syntax-Error-Reporting-Function">4.4.2 The Syntax Error Reporting Function <code>yyreport_syntax_error</code></a></li>
+    </ul></li>
+    <li><a id="toc-Special-Features-for-Use-in-Actions" href="Action-Features.html#Action-Features">4.5 Special Features for Use in Actions</a></li>
+    <li><a id="toc-Parser-Internationalization" href="Internationalization.html#Internationalization">4.6 Parser Internationalization</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Enabling-Internationalization" href="Enabling-I18n.html#Enabling-I18n">4.6.1 Enabling Internationalization</a></li>
+      <li><a id="toc-Token-Internationalization" href="Token-I18n.html#Token-I18n">4.6.2 Token Internationalization</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a id="toc-The-Bison-Parser-Algorithm" href="Algorithm.html#Algorithm">5 The Bison Parser Algorithm</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Lookahead-Tokens" href="Lookahead.html#Lookahead">5.1 Lookahead Tokens</a></li>
+    <li><a id="toc-Shift_002fReduce-Conflicts" href="Shift_002fReduce.html#Shift_002fReduce">5.2 Shift/Reduce Conflicts</a></li>
+    <li><a id="toc-Operator-Precedence-1" href="Precedence.html#Precedence">5.3 Operator Precedence</a>
+    <ul class="no-bullet">
+      <li><a id="toc-When-Precedence-is-Needed" href="Why-Precedence.html#Why-Precedence">5.3.1 When Precedence is Needed</a></li>
+      <li><a id="toc-Specifying-Operator-Precedence" href="Using-Precedence.html#Using-Precedence">5.3.2 Specifying Operator Precedence</a></li>
+      <li><a id="toc-Specifying-Precedence-Only" href="Precedence-Only.html#Precedence-Only">5.3.3 Specifying Precedence Only</a></li>
+      <li><a id="toc-Precedence-Examples-1" href="Precedence-Examples.html#Precedence-Examples">5.3.4 Precedence Examples</a></li>
+      <li><a id="toc-How-Precedence-Works" href="How-Precedence.html#How-Precedence">5.3.5 How Precedence Works</a></li>
+      <li><a id="toc-Using-Precedence-For-Non-Operators" href="Non-Operators.html#Non-Operators">5.3.6 Using Precedence For Non Operators</a></li>
+    </ul></li>
+    <li><a id="toc-Context_002dDependent-Precedence" href="Contextual-Precedence.html#Contextual-Precedence">5.4 Context-Dependent Precedence</a></li>
+    <li><a id="toc-Parser-States-1" href="Parser-States.html#Parser-States">5.5 Parser States</a></li>
+    <li><a id="toc-Reduce_002fReduce-Conflicts" href="Reduce_002fReduce.html#Reduce_002fReduce">5.6 Reduce/Reduce Conflicts</a></li>
+    <li><a id="toc-Mysterious-Conflicts-1" href="Mysterious-Conflicts.html#Mysterious-Conflicts">5.7 Mysterious Conflicts</a></li>
+    <li><a id="toc-Tuning-LR-1" href="Tuning-LR.html#Tuning-LR">5.8 Tuning LR</a>
+    <ul class="no-bullet">
+      <li><a id="toc-LR-Table-Construction-1" href="LR-Table-Construction.html#LR-Table-Construction">5.8.1 LR Table Construction</a></li>
+      <li><a id="toc-Default-Reductions-1" href="Default-Reductions.html#Default-Reductions">5.8.2 Default Reductions</a></li>
+      <li><a id="toc-LAC-1" href="LAC.html#LAC">5.8.3 LAC</a></li>
+      <li><a id="toc-Unreachable-States-1" href="Unreachable-States.html#Unreachable-States">5.8.4 Unreachable States</a></li>
+    </ul></li>
+    <li><a id="toc-Generalized-LR-_0028GLR_0029-Parsing" href="Generalized-LR-Parsing.html#Generalized-LR-Parsing">5.9 Generalized LR (GLR) Parsing</a></li>
+    <li><a id="toc-Memory-Management_002c-and-How-to-Avoid-Memory-Exhaustion" href="Memory-Management.html#Memory-Management">5.10 Memory Management, and How to Avoid Memory Exhaustion</a></li>
+  </ul></li>
+  <li><a id="toc-Error-Recovery-1" href="Error-Recovery.html#Error-Recovery">6 Error Recovery</a></li>
+  <li><a id="toc-Handling-Context-Dependencies" href="Context-Dependency.html#Context-Dependency">7 Handling Context Dependencies</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Semantic-Info-in-Token-Kinds" href="Semantic-Tokens.html#Semantic-Tokens">7.1 Semantic Info in Token Kinds</a></li>
+    <li><a id="toc-Lexical-Tie_002dins-1" href="Lexical-Tie_002dins.html#Lexical-Tie_002dins">7.2 Lexical Tie-ins</a></li>
+    <li><a id="toc-Lexical-Tie_002dins-and-Error-Recovery" href="Tie_002din-Recovery.html#Tie_002din-Recovery">7.3 Lexical Tie-ins and Error Recovery</a></li>
+  </ul></li>
+  <li><a id="toc-Debugging-Your-Parser" href="Debugging.html#Debugging">8 Debugging Your Parser</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Understanding-Your-Parser" href="Understanding.html#Understanding">8.1 Understanding Your Parser</a></li>
+    <li><a id="toc-Visualizing-Your-Parser" href="Graphviz.html#Graphviz">8.2 Visualizing Your Parser</a></li>
+    <li><a id="toc-Visualizing-your-parser-in-multiple-formats" href="Xml.html#Xml">8.3 Visualizing your parser in multiple formats</a></li>
+    <li><a id="toc-Tracing-Your-Parser" href="Tracing.html#Tracing">8.4 Tracing Your Parser</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Enabling-Traces-1" href="Enabling-Traces.html#Enabling-Traces">8.4.1 Enabling Traces</a></li>
+      <li><a id="toc-Enabling-Debug-Traces-for-mfcalc" href="Mfcalc-Traces.html#Mfcalc-Traces">8.4.2 Enabling Debug Traces for <code>mfcalc</code></a></li>
+      <li><a id="toc-The-YYPRINT-Macro-1" href="The-YYPRINT-Macro.html#The-YYPRINT-Macro">8.4.3 The <code>YYPRINT</code> Macro</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a id="toc-Invoking-Bison" href="Invocation.html#Invocation">9 Invoking Bison</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Bison-Options-1" href="Bison-Options.html#Bison-Options">9.1 Bison Options</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Operation-Modes-1" href="Operation-Modes.html#Operation-Modes">9.1.1 Operation Modes</a></li>
+      <li><a id="toc-Diagnostics-1" href="Diagnostics.html#Diagnostics">9.1.2 Diagnostics</a></li>
+      <li><a id="toc-Tuning-the-Parser-1" href="Tuning-the-Parser.html#Tuning-the-Parser">9.1.3 Tuning the Parser</a></li>
+      <li><a id="toc-Output-Files-1" href="Output-Files.html#Output-Files">9.1.4 Output Files</a></li>
+    </ul></li>
+    <li><a id="toc-Option-Cross-Key-1" href="Option-Cross-Key.html#Option-Cross-Key">9.2 Option Cross Key</a></li>
+    <li><a id="toc-Yacc-Library-1" href="Yacc-Library.html#Yacc-Library">9.3 Yacc Library</a></li>
+  </ul></li>
+  <li><a id="toc-Parsers-Written-In-Other-Languages" href="Other-Languages.html#Other-Languages">10 Parsers Written In Other Languages</a>
+  <ul class="no-bullet">
+    <li><a id="toc-C_002b_002b-Parsers-1" href="C_002b_002b-Parsers.html#C_002b_002b-Parsers">10.1 C++ Parsers</a>
+    <ul class="no-bullet">
+      <li><a id="toc-A-Simple-C_002b_002b-Example-1" href="A-Simple-C_002b_002b-Example.html#A-Simple-C_002b_002b-Example">10.1.1 A Simple C++ Example</a></li>
+      <li><a id="toc-C_002b_002b-Bison-Interface-1" href="C_002b_002b-Bison-Interface.html#C_002b_002b-Bison-Interface">10.1.2 C++ Bison Interface</a></li>
+      <li><a id="toc-C_002b_002b-Parser-Interface-1" href="C_002b_002b-Parser-Interface.html#C_002b_002b-Parser-Interface">10.1.3 C++ Parser Interface</a></li>
+      <li><a id="toc-C_002b_002b-Semantic-Values-1" href="C_002b_002b-Semantic-Values.html#C_002b_002b-Semantic-Values">10.1.4 C++ Semantic Values</a>
+      <ul class="no-bullet">
+        <li><a id="toc-C_002b_002b-Unions-1" href="C_002b_002b-Unions.html#C_002b_002b-Unions">10.1.4.1 C++ Unions</a></li>
+        <li><a id="toc-C_002b_002b-Variants-1" href="C_002b_002b-Variants.html#C_002b_002b-Variants">10.1.4.2 C++ Variants</a></li>
+      </ul></li>
+      <li><a id="toc-C_002b_002b-Location-Values-1" href="C_002b_002b-Location-Values.html#C_002b_002b-Location-Values">10.1.5 C++ Location Values</a>
+      <ul class="no-bullet">
+        <li><a id="toc-C_002b_002b-position-1" href="C_002b_002b-position.html#C_002b_002b-position">10.1.5.1 C++ <code>position</code></a></li>
+        <li><a id="toc-C_002b_002b-location-1" href="C_002b_002b-location.html#C_002b_002b-location">10.1.5.2 C++ <code>location</code></a></li>
+        <li><a id="toc-Exposing-the-Location-Classes-1" href="Exposing-the-Location-Classes.html#Exposing-the-Location-Classes">10.1.5.3 Exposing the Location Classes</a></li>
+        <li><a id="toc-User-Defined-Location-Type-1" href="User-Defined-Location-Type.html#User-Defined-Location-Type">10.1.5.4 User Defined Location Type</a></li>
+      </ul></li>
+      <li><a id="toc-C_002b_002b-Parser-Context-1" href="C_002b_002b-Parser-Context.html#C_002b_002b-Parser-Context">10.1.6 C++ Parser Context</a></li>
+      <li><a id="toc-C_002b_002b-Scanner-Interface-1" href="C_002b_002b-Scanner-Interface.html#C_002b_002b-Scanner-Interface">10.1.7 C++ Scanner Interface</a>
+      <ul class="no-bullet">
+        <li><a id="toc-Split-Symbols-1" href="Split-Symbols.html#Split-Symbols">10.1.7.1 Split Symbols</a></li>
+        <li><a id="toc-Complete-Symbols-1" href="Complete-Symbols.html#Complete-Symbols">10.1.7.2 Complete Symbols</a></li>
+      </ul></li>
+      <li><a id="toc-A-Complete-C_002b_002b-Example-1" href="A-Complete-C_002b_002b-Example.html#A-Complete-C_002b_002b-Example">10.1.8 A Complete C++ Example</a>
+      <ul class="no-bullet">
+        <li><a id="toc-Calc_002b_002b-_002d_002d_002d-C_002b_002b-Calculator-1" href="Calc_002b_002b-_002d_002d_002d-C_002b_002b-Calculator.html#Calc_002b_002b-_002d_002d_002d-C_002b_002b-Calculator">10.1.8.1 Calc++ &mdash; C++ Calculator</a></li>
+        <li><a id="toc-Calc_002b_002b-Parsing-Driver-1" href="Calc_002b_002b-Parsing-Driver.html#Calc_002b_002b-Parsing-Driver">10.1.8.2 Calc++ Parsing Driver</a></li>
+        <li><a id="toc-Calc_002b_002b-Parser-1" href="Calc_002b_002b-Parser.html#Calc_002b_002b-Parser">10.1.8.3 Calc++ Parser</a></li>
+        <li><a id="toc-Calc_002b_002b-Scanner-1" href="Calc_002b_002b-Scanner.html#Calc_002b_002b-Scanner">10.1.8.4 Calc++ Scanner</a></li>
+        <li><a id="toc-Calc_002b_002b-Top-Level-1" href="Calc_002b_002b-Top-Level.html#Calc_002b_002b-Top-Level">10.1.8.5 Calc++ Top Level</a></li>
+      </ul></li>
+    </ul></li>
+    <li><a id="toc-Java-Parsers-1" href="Java-Parsers.html#Java-Parsers">10.2 Java Parsers</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Java-Bison-Interface-1" href="Java-Bison-Interface.html#Java-Bison-Interface">10.2.1 Java Bison Interface</a></li>
+      <li><a id="toc-Java-Semantic-Values-1" href="Java-Semantic-Values.html#Java-Semantic-Values">10.2.2 Java Semantic Values</a></li>
+      <li><a id="toc-Java-Location-Values-1" href="Java-Location-Values.html#Java-Location-Values">10.2.3 Java Location Values</a></li>
+      <li><a id="toc-Java-Parser-Interface-1" href="Java-Parser-Interface.html#Java-Parser-Interface">10.2.4 Java Parser Interface</a></li>
+      <li><a id="toc-Java-Parser-Context-Interface-1" href="Java-Parser-Context-Interface.html#Java-Parser-Context-Interface">10.2.5 Java Parser Context Interface</a></li>
+      <li><a id="toc-Java-Scanner-Interface-1" href="Java-Scanner-Interface.html#Java-Scanner-Interface">10.2.6 Java Scanner Interface</a></li>
+      <li><a id="toc-Special-Features-for-Use-in-Java-Actions" href="Java-Action-Features.html#Java-Action-Features">10.2.7 Special Features for Use in Java Actions</a></li>
+      <li><a id="toc-Java-Push-Parser-Interface-1" href="Java-Push-Parser-Interface.html#Java-Push-Parser-Interface">10.2.8 Java Push Parser Interface</a></li>
+      <li><a id="toc-Differences-between-C_002fC_002b_002b-and-Java-Grammars" href="Java-Differences.html#Java-Differences">10.2.9 Differences between C/C++ and Java Grammars</a></li>
+      <li><a id="toc-Java-Declarations-Summary-1" href="Java-Declarations-Summary.html#Java-Declarations-Summary">10.2.10 Java Declarations Summary</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a id="toc-A-Brief-History-of-the-Greater-Ungulates" href="History.html#History">11 A Brief History of the Greater Ungulates</a>
+  <ul class="no-bullet">
+    <li><a id="toc-The-ancestral-Yacc" href="Yacc.html#Yacc">11.1 The ancestral Yacc</a></li>
+    <li><a id="toc-yacchack-1" href="yacchack.html#yacchack">11.2 yacchack</a></li>
+    <li><a id="toc-Berkeley-Yacc" href="Byacc.html#Byacc">11.3 Berkeley Yacc</a></li>
+    <li><a id="toc-Bison-2" href="Bison.html#Bison">11.4 Bison</a></li>
+    <li><a id="toc-Other-Ungulates-1" href="Other-Ungulates.html#Other-Ungulates">11.5 Other Ungulates</a></li>
+  </ul></li>
+  <li><a id="toc-Frequently-Asked-Questions" href="FAQ.html#FAQ">12 Frequently Asked Questions</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Memory-Exhausted-1" href="Memory-Exhausted.html#Memory-Exhausted">12.1 Memory Exhausted</a></li>
+    <li><a id="toc-How-Can-I-Reset-the-Parser-1" href="How-Can-I-Reset-the-Parser.html#How-Can-I-Reset-the-Parser">12.2 How Can I Reset the Parser</a></li>
+    <li><a id="toc-Strings-are-Destroyed-1" href="Strings-are-Destroyed.html#Strings-are-Destroyed">12.3 Strings are Destroyed</a></li>
+    <li><a id="toc-Implementing-Gotos_002fLoops-1" href="Implementing-Gotos_002fLoops.html#Implementing-Gotos_002fLoops">12.4 Implementing Gotos/Loops</a></li>
+    <li><a id="toc-Multiple-start_002dsymbols-1" href="Multiple-start_002dsymbols.html#Multiple-start_002dsymbols">12.5 Multiple start-symbols</a></li>
+    <li><a id="toc-Secure_003f-Conform_003f-1" href="Secure_003f-Conform_003f.html#Secure_003f-Conform_003f">12.6 Secure?  Conform?</a></li>
+    <li><a id="toc-Enabling-Relocatability-1" href="Enabling-Relocatability.html#Enabling-Relocatability">12.7 Enabling Relocatability</a></li>
+    <li><a id="toc-I-can_0027t-build-Bison-1" href="I-can_0027t-build-Bison.html#I-can_0027t-build-Bison">12.8 I can&rsquo;t build Bison</a></li>
+    <li><a id="toc-Where-can-I-find-help_003f-1" href="Where-can-I-find-help_003f.html#Where-can-I-find-help_003f">12.9 Where can I find help?</a></li>
+    <li><a id="toc-Bug-Reports-1" href="Bug-Reports.html#Bug-Reports">12.10 Bug Reports</a></li>
+    <li><a id="toc-More-Languages-1" href="More-Languages.html#More-Languages">12.11 More Languages</a></li>
+    <li><a id="toc-Beta-Testing-1" href="Beta-Testing.html#Beta-Testing">12.12 Beta Testing</a></li>
+    <li><a id="toc-Mailing-Lists-1" href="Mailing-Lists.html#Mailing-Lists">12.13 Mailing Lists</a></li>
+  </ul></li>
+  <li><a id="toc-Bison-Symbols" href="Table-of-Symbols.html#Table-of-Symbols">Appendix A Bison Symbols</a></li>
+  <li><a id="toc-Glossary-1" href="Glossary.html#Glossary">Appendix B Glossary</a></li>
+  <li><a id="toc-GNU-Free-Documentation-License-1" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix C GNU Free Documentation License</a></li>
+  <li><a id="toc-Bibliography-1" href="Bibliography.html#Bibliography">Bibliography</a></li>
+  <li><a id="toc-Index-of-Terms-1" href="Index-of-Terms.html#Index-of-Terms" rel="index">Index of Terms</a></li>
+</ul>
+</div>
+
+
+<span id="Top"></span><div class="header">
+<p>
+Next: <a href="Introduction.html" accesskey="n" rel="next">Introduction</a>, Up: <a href="/manual" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index-of-Terms.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<span id="Bison-1"></span><h1 class="top">Bison</h1>
+
+<p>This manual (8 May 2020) is for GNU Bison (version 3.6),
+the GNU parser generator.
+</p>
+<p>Copyright &copy; 1988&ndash;1993, 1995, 1998&ndash;2015, 2018&ndash;2020 Free
+Software Foundation, Inc.
+</p>
+<blockquote>
+<p>Permission is granted to copy, distribute and/or modify this document under
+the terms of the GNU Free Documentation License, Version 1.3 or any later
+version published by the Free Software Foundation; with no Invariant
+Sections, with the Front-Cover texts being &ldquo;A GNU Manual,&rdquo; and with the
+Back-Cover Texts as in (a) below.  A copy of the license is included in the
+section entitled &ldquo;GNU Free Documentation License.&rdquo;
+</p>
+<p>(a) The FSF&rsquo;s Back-Cover Text is: &ldquo;You have the freedom to copy and modify
+this GNU manual.  Buying copies from the FSF supports it in developing GNU
+and promoting software freedom.&rdquo;
+</p></blockquote>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Introduction.html" accesskey="1">Introduction</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What GNU Bison is.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Conditions.html" accesskey="2">Conditions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Conditions for using Bison and its output.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Copying.html" accesskey="3">Copying</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The GNU General Public License says
+                          how you can copy and share Bison.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Tutorial sections:
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Concepts.html" accesskey="4">Concepts</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic concepts for understanding Bison.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Examples.html" accesskey="5">Examples</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Three simple explained examples of using Bison.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Reference sections:
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Grammar-File.html" accesskey="6">Grammar File</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Writing Bison declarations and rules.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Interface.html" accesskey="7">Interface</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">C-language interface to the parser function <code>yyparse</code>.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Algorithm.html" accesskey="8">Algorithm</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How the Bison parser works at run-time.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Error-Recovery.html" accesskey="9">Error Recovery</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Writing rules for error recovery.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Context-Dependency.html">Context Dependency</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What to do if your language syntax is too
+                          messy for Bison to handle straightforwardly.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Debugging.html">Debugging</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Understanding or debugging Bison parsers.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Invocation.html">Invocation</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to run Bison (to produce the parser implementation).
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Other-Languages.html">Other Languages</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating C++ and Java parsers.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="History.html">History</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Bison came to be
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="FAQ.html">FAQ</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Frequently Asked Questions
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Table-of-Symbols.html">Table of Symbols</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">All the keywords of the Bison language are explained.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Glossary.html">Glossary</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic concepts are explained.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="GNU-Free-Documentation-License.html">GNU Free Documentation License</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Copying and sharing this manual
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Bibliography.html">Bibliography</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Publications cited in this manual.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Index-of-Terms.html" rel="index">Index of Terms</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Cross-references to the text.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+</pre></th></tr><tr><th colspan="3" align="left" valign="top"><pre class="menu-comment"> &mdash; The Detailed Node Listing &mdash;
+
+The Concepts of Bison
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Language-and-Grammar.html">Language and Grammar</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Languages and context-free grammars,
+                           as mathematical ideas.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Grammar-in-Bison.html">Grammar in Bison</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How we represent grammars for Bison&rsquo;s sake.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Semantic-Values.html">Semantic Values</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Each token or syntactic grouping can have
+                           a semantic value (the value of an integer,
+                           the name of an identifier, etc.).
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Semantic-Actions.html">Semantic Actions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Each rule can have an action containing C code.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="GLR-Parsers.html">GLR Parsers</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Writing parsers for general context-free languages.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Locations.html">Locations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Overview of location tracking.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Bison-Parser.html">Bison Parser</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What are Bison&rsquo;s input and output,
+                           how is the output used?
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Stages.html">Stages</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Stages in writing and running Bison grammars.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Grammar-Layout.html">Grammar Layout</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Overall structure of a Bison grammar file.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Writing GLR Parsers
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Simple-GLR-Parsers.html">Simple GLR Parsers</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using GLR parsers on unambiguous grammars.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Merging-GLR-Parses.html">Merging GLR Parses</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using GLR parsers to resolve ambiguities.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="GLR-Semantic-Actions.html">GLR Semantic Actions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Considerations for semantic values and deferred actions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Semantic-Predicates.html">Semantic Predicates</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling a parse with arbitrary computations.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Compiler-Requirements-for-GLR.html">Compiler Requirements for GLR</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">GLR parsers require a modern C compiler.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Examples
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="RPN-Calc.html">RPN Calc</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reverse Polish Notation Calculator;
+                             a first example with no operator precedence.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Infix-Calc.html">Infix Calc</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Infix (algebraic) notation calculator.
+                             Operator precedence is introduced.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Simple-Error-Recovery.html">Simple Error Recovery</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Continuing after syntax errors.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Location-Tracking-Calc.html">Location Tracking Calc</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Demonstrating the use of @<var>n</var> and @$.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Multi_002dfunction-Calc.html">Multi-function Calc</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Calculator with memory and trig functions.
+                             It uses multiple data-types for semantic values.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Exercises.html">Exercises</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Ideas for improving the multi-function calculator.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Reverse Polish Notation Calculator
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Rpcalc-Declarations.html">Rpcalc Declarations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Prologue (declarations) for rpcalc.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Rpcalc-Rules.html">Rpcalc Rules</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Grammar Rules for rpcalc, with explanation.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Rpcalc-Lexer.html">Rpcalc Lexer</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The lexical analyzer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Rpcalc-Main.html">Rpcalc Main</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The controlling function.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Rpcalc-Error.html">Rpcalc Error</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The error reporting function.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Rpcalc-Generate.html">Rpcalc Generate</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Running Bison on the grammar file.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Rpcalc-Compile.html">Rpcalc Compile</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Run the C compiler on the output code.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Grammar Rules for <code>rpcalc</code>
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Rpcalc-Input.html">Rpcalc Input</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Explanation of the <code>input</code> nonterminal
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Rpcalc-Line.html">Rpcalc Line</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Explanation of the <code>line</code> nonterminal
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Rpcalc-Expr.html">Rpcalc Expr</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Explanation of the <code>expr</code> nonterminal
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Location Tracking Calculator: <code>ltcalc</code>
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Ltcalc-Declarations.html">Ltcalc Declarations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Bison and C declarations for ltcalc.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Ltcalc-Rules.html">Ltcalc Rules</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Grammar rules for ltcalc, with explanations.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Ltcalc-Lexer.html">Ltcalc Lexer</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The lexical analyzer.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Multi-Function Calculator: <code>mfcalc</code>
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Mfcalc-Declarations.html">Mfcalc Declarations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Bison declarations for multi-function calculator.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mfcalc-Rules.html">Mfcalc Rules</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Grammar rules for the calculator.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mfcalc-Symbol-Table.html">Mfcalc Symbol Table</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Symbol table management subroutines.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mfcalc-Lexer.html">Mfcalc Lexer</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The lexical analyzer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mfcalc-Main.html">Mfcalc Main</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The controlling function.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Bison Grammar Files
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Grammar-Outline.html">Grammar Outline</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Overall layout of the grammar file.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Symbols.html">Symbols</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Terminal and nonterminal symbols.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Rules.html">Rules</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to write grammar rules.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Semantics.html">Semantics</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Semantic values and actions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Tracking-Locations.html">Tracking Locations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Locations and actions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Named-References.html">Named References</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using named references in actions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Declarations.html">Declarations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">All kinds of Bison declarations are described here.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Multiple-Parsers.html">Multiple Parsers</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Putting more than one Bison parser in one program.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Outline of a Bison Grammar
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Prologue.html">Prologue</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Syntax and usage of the prologue.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Prologue-Alternatives.html">Prologue Alternatives</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Syntax and usage of alternatives to the prologue.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Bison-Declarations.html">Bison Declarations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Syntax and usage of the Bison declarations section.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Grammar-Rules.html">Grammar Rules</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Syntax and usage of the grammar rules section.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Epilogue.html">Epilogue</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Syntax and usage of the epilogue.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Grammar Rules
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Rules-Syntax.html">Rules Syntax</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Syntax of the rules.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Empty-Rules.html">Empty Rules</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Symbols that can match the empty string.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Recursion.html">Recursion</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Writing recursive rules.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+
+Defining Language Semantics
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Value-Type.html">Value Type</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying one data type for all semantic values.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Multiple-Types.html">Multiple Types</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying several alternative data types.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Type-Generation.html">Type Generation</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Generating the semantic value type.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Union-Decl.html">Union Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Declaring the set of all semantic value types.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Structured-Value-Type.html">Structured Value Type</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Providing a structured semantic value type.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Actions.html">Actions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An action is the semantic definition of a grammar rule.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Action-Types.html">Action Types</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying data types for actions to operate on.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Midrule-Actions.html">Midrule Actions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Most actions go at the end of a rule.
+                      This says when, why and how to use the exceptional
+                        action in the middle of a rule.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Actions in Midrule
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Using-Midrule-Actions.html">Using Midrule Actions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Putting an action in the middle of a rule.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Typed-Midrule-Actions.html">Typed Midrule Actions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying the semantic type of their values.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Midrule-Action-Translation.html">Midrule Action Translation</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How midrule actions are actually processed.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Midrule-Conflicts.html">Midrule Conflicts</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Midrule actions can cause conflicts.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Tracking Locations
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Location-Type.html">Location Type</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying a data type for locations.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Actions-and-Locations.html">Actions and Locations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using locations in actions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Location-Default-Action.html">Location Default Action</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defining a general way to compute locations.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Bison Declarations
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Require-Decl.html">Require Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Requiring a Bison version.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Token-Decl.html">Token Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Declaring terminal symbols.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Precedence-Decl.html">Precedence Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Declaring terminals with precedence and associativity.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Type-Decl.html">Type Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Declaring the choice of type for a nonterminal symbol.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Symbol-Decls.html">Symbol Decls</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Summary of the Syntax of Symbol Declarations.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Initial-Action-Decl.html">Initial Action Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Code run before parsing starts.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Destructor-Decl.html">Destructor Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Declaring how symbols are freed.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Printer-Decl.html">Printer Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Declaring how symbol values are displayed.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Expect-Decl.html">Expect Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Suppressing warnings about parsing conflicts.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Start-Decl.html">Start Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying the start symbol.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Pure-Decl.html">Pure Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Requesting a reentrant parser.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Push-Decl.html">Push Decl</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Requesting a push parser.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Decl-Summary.html">Decl Summary</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Table of all Bison declarations.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="_0025define-Summary.html">%define Summary</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defining variables to adjust Bison&rsquo;s behavior.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="_0025code-Summary.html">%code Summary</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Inserting code into the parser source.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Parser C-Language Interface
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Parser-Function.html">Parser Function</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to call <code>yyparse</code> and what it returns.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Push-Parser-Interface.html">Push Parser Interface</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to create, use, and destroy push parsers.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Lexical.html">Lexical</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You must supply a function <code>yylex</code>
+                              which reads tokens.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Error-Reporting.html">Error Reporting</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Passing error messages to the user.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Action-Features.html">Action Features</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special features for use in actions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Internationalization.html">Internationalization</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to let the parser speak in the user&rsquo;s
+                              native language.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+The Lexical Analyzer Function <code>yylex</code>
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Calling-Convention.html">Calling Convention</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How <code>yyparse</code> calls <code>yylex</code>.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Special-Tokens.html">Special Tokens</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Signaling end-of-file and errors to the parser.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Tokens-from-Literals.html">Tokens from Literals</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Finding token kinds from string aliases.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Token-Values.html">Token Values</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How <code>yylex</code> must return the semantic value
+                          of the token it has read.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Token-Locations.html">Token Locations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How <code>yylex</code> must return the text location
+                          (line number, etc.) of the token, if the
+                          actions want that.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Pure-Calling.html">Pure Calling</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How the calling convention differs in a pure parser
+                          (see section <a href="Pure-Decl.html">A Pure (Reentrant) Parser</a>).
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Error Reporting
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Error-Reporting-Function.html">Error Reporting Function</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You must supply a <code>yyerror</code> function.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Syntax-Error-Reporting-Function.html">Syntax Error Reporting Function</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You can supply a <code>yyreport_syntax_error</code> function.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Parser Internationalization
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Enabling-I18n.html">Enabling I18n</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Preparing your project to support internationalization.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Token-I18n.html">Token I18n</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Preparing tokens for internationalization in error messages.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+The Bison Parser Algorithm
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Lookahead.html">Lookahead</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Parser looks one token ahead when deciding what to do.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Shift_002fReduce.html">Shift/Reduce</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Conflicts: when either shifting or reduction is valid.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Precedence.html">Precedence</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Operator precedence works by resolving conflicts.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Contextual-Precedence.html">Contextual Precedence</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">When an operator&rsquo;s precedence depends on context.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Parser-States.html">Parser States</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The parser is a finite-state-machine with stack.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Reduce_002fReduce.html">Reduce/Reduce</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">When two rules are applicable in the same situation.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mysterious-Conflicts.html">Mysterious Conflicts</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Conflicts that look unjustified.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Tuning-LR.html">Tuning LR</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to tune fundamental aspects of LR-based parsing.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Generalized-LR-Parsing.html">Generalized LR Parsing</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Parsing arbitrary context-free grammars.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Memory-Management.html">Memory Management</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What happens when memory is exhausted.  How to avoid it.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Operator Precedence
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Why-Precedence.html">Why Precedence</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An example showing why precedence is needed.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Using-Precedence.html">Using Precedence</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to specify precedence and associativity.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Precedence-Only.html">Precedence Only</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to specify precedence only.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Precedence-Examples.html">Precedence Examples</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How these features are used in the previous example.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="How-Precedence.html">How Precedence</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How they work.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Non-Operators.html">Non Operators</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using precedence for general conflicts.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Tuning LR
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="LR-Table-Construction.html">LR Table Construction</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Choose a different construction algorithm.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Default-Reductions.html">Default Reductions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Disable default reductions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="LAC.html">LAC</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Correct lookahead sets in the parser states.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Unreachable-States.html">Unreachable States</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Keep unreachable parser states for debugging.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Handling Context Dependencies
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Semantic-Tokens.html">Semantic Tokens</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Token parsing can depend on the semantic context.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Lexical-Tie_002dins.html">Lexical Tie-ins</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Token parsing can depend on the syntactic context.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Tie_002din-Recovery.html">Tie-in Recovery</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Lexical tie-ins have implications for how
+                        error recovery rules must be written.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Debugging Your Parser
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Understanding.html">Understanding</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Understanding the structure of your parser.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Graphviz.html">Graphviz</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting a visual representation of the parser.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Xml.html">Xml</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting a markup representation of the parser.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Tracing.html">Tracing</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Tracing the execution of your parser.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Tracing Your Parser
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Enabling-Traces.html">Enabling Traces</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Activating run-time trace support
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mfcalc-Traces.html">Mfcalc Traces</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Extending <code>mfcalc</code> to support traces
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="The-YYPRINT-Macro.html">The YYPRINT Macro</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Obsolete interface for semantic value reports
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Invoking Bison
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Bison-Options.html">Bison Options</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">All the options described in detail,
+                        in alphabetical order by short options.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Option-Cross-Key.html">Option Cross Key</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Alphabetical list of long options.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Yacc-Library.html">Yacc Library</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Yacc-compatible <code>yylex</code> and <code>main</code>.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Bison Options
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Operation-Modes.html">Operation Modes</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Options controlling the global behavior of <code>bison</code>
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Diagnostics.html">Diagnostics</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Options controlling the diagnostics
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Tuning-the-Parser.html">Tuning the Parser</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Options changing the generated parsers
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Output-Files.html">Output Files</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Options controlling the output
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Parsers Written In Other Languages
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="C_002b_002b-Parsers.html">C++ Parsers</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The interface to generate C++ parser classes
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Java-Parsers.html">Java Parsers</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The interface to generate Java parser classes
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+C++ Parsers
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="A-Simple-C_002b_002b-Example.html">A Simple C++ Example</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A short introduction to C++ parsers
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="C_002b_002b-Bison-Interface.html">C++ Bison Interface</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Asking for C++ parser generation
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="C_002b_002b-Parser-Interface.html">C++ Parser Interface</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Instantiating and running the parser
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="C_002b_002b-Semantic-Values.html">C++ Semantic Values</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">%union vs. C++
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="C_002b_002b-Location-Values.html">C++ Location Values</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The position and location classes
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="C_002b_002b-Parser-Context.html">C++ Parser Context</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You can supply a <code>report_syntax_error</code> function.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="C_002b_002b-Scanner-Interface.html">C++ Scanner Interface</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Exchanges between yylex and parse
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="A-Complete-C_002b_002b-Example.html">A Complete C++ Example</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Demonstrating their use
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+C++ Location Values
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="C_002b_002b-position.html">C++ position</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">One point in the source file
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="C_002b_002b-location.html">C++ location</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Two points in the source file
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Exposing-the-Location-Classes.html">Exposing the Location Classes</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using the Bison location class in your
+                                  project
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="User-Defined-Location-Type.html">User Defined Location Type</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Required interface for locations
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+A Complete C++ Example
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Calc_002b_002b-_002d_002d_002d-C_002b_002b-Calculator.html">Calc++ --- C++ Calculator</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The specifications
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Calc_002b_002b-Parsing-Driver.html">Calc++ Parsing Driver</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An active parsing context
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Calc_002b_002b-Parser.html">Calc++ Parser</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A parser class
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Calc_002b_002b-Scanner.html">Calc++ Scanner</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A pure C++ Flex scanner
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Calc_002b_002b-Top-Level.html">Calc++ Top Level</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Conducting the band
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Java Parsers
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Java-Bison-Interface.html">Java Bison Interface</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Asking for Java parser generation
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Java-Semantic-Values.html">Java Semantic Values</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">%token and %nterm vs. Java
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Java-Location-Values.html">Java Location Values</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The position and location classes
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Java-Parser-Interface.html">Java Parser Interface</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Instantiating and running the parser
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Java-Parser-Context-Interface.html">Java Parser Context Interface</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Circumstances of a syntax error
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Java-Scanner-Interface.html">Java Scanner Interface</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying the scanner for the parser
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Java-Action-Features.html">Java Action Features</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special features for use in actions
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Java-Push-Parser-Interface.html">Java Push Parser Interface</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Instantiating and running the a push parser
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Java-Differences.html">Java Differences</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Differences between C/C++ and Java Grammars
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Java-Declarations-Summary.html">Java Declarations Summary</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">List of Bison declarations used with Java
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+A Brief History of the Greater Ungulates
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Yacc.html">Yacc</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The original Yacc
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="yacchack.html">yacchack</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An obscure early implementation of reentrancy
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Byacc.html">Byacc</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Berkeley Yacc
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Bison.html">Bison</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">This program
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Other-Ungulates.html">Other Ungulates</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Similar programs
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Frequently Asked Questions
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Memory-Exhausted.html">Memory Exhausted</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Breaking the Stack Limits
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="How-Can-I-Reset-the-Parser.html">How Can I Reset the Parser</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"><code>yyparse</code> Keeps some State
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Strings-are-Destroyed.html">Strings are Destroyed</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"><code>yylval</code> Loses Track of Strings
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Implementing-Gotos_002fLoops.html">Implementing Gotos/Loops</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Control Flow in the Calculator
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Multiple-start_002dsymbols.html">Multiple start-symbols</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Factoring closely related grammars
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Enabling-Relocatability.html">Enabling Relocatability</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving Bison/using it through network shares
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Secure_003f-Conform_003f.html">Secure?  Conform?</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Is Bison POSIX safe?
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="I-can_0027t-build-Bison.html">I can't build Bison</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Troubleshooting
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Where-can-I-find-help_003f.html">Where can I find help?</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Troubleshouting
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Bug-Reports.html">Bug Reports</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Troublereporting
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="More-Languages.html">More Languages</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Parsers in C++, Java, and so on
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Beta-Testing.html">Beta Testing</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Experimenting development versions
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mailing-Lists.html">Mailing Lists</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Meeting other Bison users
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Copying This Manual
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="GNU-Free-Documentation-License.html">GNU Free Documentation License</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Copying and sharing this manual
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+</pre></th></tr></table>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Introduction.html" accesskey="n" rel="next">Introduction</a>, Up: <a href="/manual" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index-of-Terms.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>
