@@ -21,8 +21,14 @@ int main(){
 	fprintf(stderr, "ready>");
 	getNextToken();
 
+	// make the module
+	InitializeModule();
+
 	// run
 	MainLoop();
+
+	// print out all of the generated code
+	TheModule->print(errs(), nullptr);
 
 	return 0;
 }

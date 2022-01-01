@@ -1,3 +1,5 @@
+//#pragma once
+
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
@@ -6,11 +8,26 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "llvm/ADT/APFloat.h"
+#include "llvm/ADT/STLExtras.h"
+#include "llvm/IR/BasicBlock.h"
+#include "llvm/IR/Constants.h"
+#include "llvm/IR/DerivedTypes.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
+#include "llvm/IR/Type.h"
+#include "llvm/IR/Verifier.h"
+using namespace llvm;
+
+namespace{
 
 // ExprAST
 class ExprAST{
 public:
-	virtual ~ExprAST(){};
+	virtual ~ExprAST() = default ;
+	virtual Value * codegen() = 0;
 };
 
 
@@ -19,6 +36,7 @@ class NumberExprAST : public ExprAST{
 	double Val;
 public:
 	NumberExprAST(double _Val) : Val(_Val) {}
+	Value * codegen() override;
 };
 
 
@@ -28,6 +46,8 @@ class VariableExprAST : public ExprAST{
 
 public:
 	VariableExprAST(const std::string &Name) : Name(Name) {}
+
+	Value * codegen() override;
 };
 
 
@@ -39,6 +59,8 @@ class BinaryExprAST : public ExprAST{
 public:
 	BinaryExprAST(char _Op, std::unique_ptr<ExprAST> _LHS, std::unique_ptr<ExprAST> _RHS)
 		: Op(_Op), LHS(std::move(_LHS)), RHS(std::move(_RHS)) {}
+
+	Value * codegen() override;
 };
 
 
@@ -50,6 +72,8 @@ class CallExprAST : public ExprAST{
 public:
 	CallExprAST(const std::string &_Callee, std::vector<std::unique_ptr<ExprAST>> _Args)
 		: Callee(_Callee), Args(std::move(_Args)) {}
+
+	Value * codegen() override;
 };
 
 
@@ -61,9 +85,11 @@ class PrototypeAST{
 
 public:
 	PrototypeAST(const std::string &_Name, std::vector<std::string> _Args)
-		: Name(_Name), Args(_Args) {}
-
+		: Name(_Name), Args(std::move(_Args)) {}
+	
 	const std::string &getName() const { return Name; }
+
+	Function * codegen();
 };
 
 // FunctionAST
@@ -74,8 +100,11 @@ class FunctionAST{
 public:
 	FunctionAST(std::unique_ptr<PrototypeAST> _Proto, std::unique_ptr<ExprAST> _Body)
 		: Proto(std::move(_Proto)), Body(std::move(_Body)) {}
+		
+	Function * codegen();
 };
 
+}// end anonymous namespace
 
 
 static int getNextToken();
