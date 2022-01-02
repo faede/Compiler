@@ -1,2 +1,0 @@
-/Library/Developer/CommandLineTools/usr/bin/ar qc liblibanswer.a CMakeFiles/libanswer.dir/Paser.cpp.o CMakeFiles/libanswer.dir/lexer.cpp.o CMakeFiles/libanswer.dir/IR.cpp.o
-/Library/Developer/CommandLineTools/usr/bin/ranlib liblibanswer.a
