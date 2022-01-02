@@ -10,7 +10,7 @@ project(toy)
 add_library(libanswer Paser.cpp Paser.hpp lexer.cpp lexer.hpp IR.cpp IR.hpp)
 
 add_executable(toy toy.cpp)
-add_compile_options(-O3 `llvm-config --cxxflags --ldflags --system-libs --libs core` )
+add_compile_options(-O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` )
 
 # 为 toy 可执行目标链接 libanswer
 target_link_libraries(toy libanswer)
@@ -33,7 +33,7 @@ target_link_libraries(toy libanswer)
 
     for some reason , cmake doesn't work
     using command:
-        clang++ -g -O3 toy.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o toy
+        clang++ -g toy.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -O3 -o toy
     to compile
 
 

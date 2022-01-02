@@ -1,4 +1,0 @@
-/Users/zyy/Documents/GitHub/Compiler/My_First_Language_Frontend/build/CMakeFiles/rebuild_cache.dir
-/Users/zyy/Documents/GitHub/Compiler/My_First_Language_Frontend/build/CMakeFiles/edit_cache.dir
-/Users/zyy/Documents/GitHub/Compiler/My_First_Language_Frontend/build/CMakeFiles/toy.dir
-/Users/zyy/Documents/GitHub/Compiler/My_First_Language_Frontend/build/CMakeFiles/libanswer.dir
