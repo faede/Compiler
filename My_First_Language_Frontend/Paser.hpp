@@ -64,6 +64,21 @@ public:
 };
 
 
+// IfExprAST, for if/then/else.
+class IfExprAST : public ExprAST{
+	std::unique_ptr<ExprAST> Cond, Then, Else;
+
+public:
+	IfExprAST(std::unique_ptr<ExprAST> _Cond, std::unique_ptr<ExprAST> _Then,
+			  std::unique_ptr<ExprAST> _Else)
+		: Cond(std::move(_Cond)), Then(std::move(Then)), Else(std::move(_Else)){}
+
+	Value * codegen() override;
+}
+
+
+
+
 // CallExprAST
 class CallExprAST : public ExprAST{
 	std::string Callee;
@@ -154,6 +169,10 @@ static std::unique_ptr<FunctionAST> ParseDefinition();
 
 // external ::= 'extern' prototype
 static std::unique_ptr<PrototypeAST> ParseExtern();
+
+
+
+
 
 // toplevelexpr ::= expression
 static std::unique_ptr<FunctionAST> ParseTopLevelExpr();

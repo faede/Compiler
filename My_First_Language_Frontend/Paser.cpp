@@ -122,6 +122,7 @@ static std::unique_ptr<ExprAST> ParseIdentifierExpr(){
 // 	::= identifierexpr
 // 	::= numberexpr
 // 	::= parenexpr
+//  ::= ifexpr
 static std::unique_ptr<ExprAST> ParsePrimary(){
 	switch(CurTok){
 		default:
@@ -132,6 +133,8 @@ static std::unique_ptr<ExprAST> ParsePrimary(){
 			return ParseNumberExpr();
 		case '(':
 			return ParseParenExpr();
+		case tok_if:
+			return ParseIfExpr();
 	}
 } 
 
@@ -244,6 +247,36 @@ static std::unique_ptr<PrototypeAST> ParseExtern(){
 	getNextToken(); // eat extern
 	return ParsePrototype();
 }
+
+// ifexpr := 'if' expression 'then' expression 'else' expression
+static std::unique_ptr<ExprAST> ParseIfExpr(){
+	getNextToken(); // eat if
+
+	// condition
+	auto Cond = ParseExpression();
+	if(!Cond)
+		return nullptr;
+	
+	if(CurTok != tok_then)
+		return LogError("Expected then");
+	getNextToken(); // eat then
+
+	auto Then = ParseExpression();
+	if(!Then)
+		return nullptr;
+
+	if(CurTok != tok_else)
+		return LogError("Expected else");
+	
+	getNextToken();  // eat else
+
+	auto Else = ParseExpression();
+	if(!Else)
+		return nullptr;
+
+	return std::make_unique<IfExprAST> (std::move(Cond), std::move(Then), std::move(Else));
+}
+
 
 
 // toplevelexpr ::= expression
