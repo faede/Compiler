@@ -93,8 +93,16 @@ Value * BinaryExprAST::codegen(){
 			// convert bool to double 0.0 or 1.0 by treat input as unsigned value
 			return Builder.CreateUIToFP(L, Type::getDoubleTy(TheContext), "booltmp");
 		default:
-			return LogErrorV("Invalid binary operator");
+			break;
 	}
+
+	// if it wasn't a builin binary operator, it must be a user defined one
+	// emit a call to it
+	Function * F = getFunction(std::string("binary") + Op);
+	assert(F && "binary operator not found!");
+
+	Value * Ops[2] = {L, R};
+	return Builder.CreateCall(F, Ops, "binop");
 }
 
 
@@ -289,18 +297,17 @@ Function * FunctionAST::codegen(){
 	// Transfer ownership of the prototype to the FunctionProtos map, but keep a
     // reference to it for use below
 	auto & P = *Proto;
-	FunctionProtos[Proto->getName()] = std::move(Proto); 
+	FunctionProtos[Proto->getName()] = std::move(Proto);
 
 	// First, check for an existing function from a previous 'extern' declaration.
 	Function * TheFunction = getFunction(P.getName());
 
-	// If Module::getFunction returns null then no previous version exists
-	// ??? I think shouldn't be deleted
-	if(!TheFunction)
-		TheFunction = Proto->codegen();
-
 	if(!TheFunction)
 		return nullptr;
+
+	// If this is an operator, install it
+	if(P.isBinaryOp())
+		BinopPrecedence[P.getOperatorName()] = P.getBinaryPrecedence();
 
 	// Create a new basic block to start
 	BasicBlock * BB = BasicBlock::Create(TheContext, "entry", TheFunction);
@@ -337,7 +344,17 @@ Function * FunctionAST::codegen(){
 }
 
 
+Value * UnaryExprAST::codegen(){
+	Value * OperandV = Operand->codegen();
+	if(!OperandV)
+		return nullptr;
 
+	Function * F = getFunction(std::string("unary") + Opcode);
+	if(!F)
+		return LogErrorV("Unknown unary operator");
+
+	return Builder.CreateCall(F, OperandV, "unop");
+ }
 
 
 

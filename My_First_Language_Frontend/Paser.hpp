@@ -93,6 +93,18 @@ public:
 };
 
 
+// UnaryExprAST, for a unary operator
+class UnaryExprAST : public ExprAST{
+	char Opcode;
+	std::unique_ptr<ExprAST> Operand;
+
+public:
+	UnaryExprAST(char _Opcode, std::unique_ptr<ExprAST> _Operand)
+		: Opcode(_Opcode), Operand(std::move(_Operand)) {}
+
+	Value * codegen() override;
+};
+
 // CallExprAST
 class CallExprAST : public ExprAST{
 	std::string Callee;
@@ -108,17 +120,32 @@ public:
 
 // PrototypeAST, represent the "protype" for a  function
 // since all type is double, we don't need to save it
+// which captures its argument names as well as if it is an operator
 class PrototypeAST{
 	std::string Name;
 	std::vector<std::string> Args;
+	bool IsOperator;
+	unsigned Precedence; // Precedence if a binary op
 
 public:
-	PrototypeAST(const std::string &_Name, std::vector<std::string> _Args)
-		: Name(_Name), Args(std::move(_Args)) {}
+	PrototypeAST(const std::string &_Name, std::vector<std::string> _Args,
+				 bool _IsOperator = false, unsigned _Prec = 0)
+		: Name(_Name), Args(std::move(_Args)), IsOperator(_IsOperator),
+		  Precedence(_Prec) {}
 	
 	const std::string &getName() const { return Name; }
 
 	Function * codegen();
+
+	bool isUnaryOp() const { return IsOperator && Args.size() == 1; }
+	bool isBinaryOp() const { return IsOperator && Args.size() == 2; }
+
+	char getOperatorName() const{
+		assert(isUnaryOp() || isBinaryOp());
+		return Name[Name.size() - 1]; // see ParsePrototype
+	}
+
+	unsigned getBinaryPrecedence() const { return Precedence; }
 };
 
 // FunctionAST
@@ -177,6 +204,11 @@ static std::unique_ptr<ExprAST> ParseBinOpRHS(int , std::unique_ptr<ExprAST> );
 // prototype
 // 	::= id '(' id* ')'
 static std::unique_ptr<PrototypeAST> ParsePrototype();
+
+// unary
+//    ::= primary
+//    ::= '!' unary
+static std::unique_ptr<ExprAST> ParseUnary();
 
 // definition ::= 'def' prototype expression
 static std::unique_ptr<FunctionAST> ParseDefinition();
