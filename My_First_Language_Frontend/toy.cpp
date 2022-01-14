@@ -35,6 +35,7 @@ int main(){
 
 	// Install standard binary operators.
 	// 1 is loweset precedence
+	BinopPrecedence['='] = 2;
 	BinopPrecedence['<'] = 10;
 	BinopPrecedence['+'] = 20;
 	BinopPrecedence['-'] = 20;

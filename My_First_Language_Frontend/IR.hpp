@@ -36,8 +36,8 @@ using namespace llvm;
 static LLVMContext TheContext; // owns a lot of core LLVM data structures
 static IRBuilder<> Builder(TheContext); // a helper object that makes it easy to generate LLVM instructions
 static std::unique_ptr<Module> TheModule; // contains functions and global variables
-// keeps track of which values are defined in the current scope and what their LLVM representation is
-static std::map<std::string, Value *> NamedValues; 
+// keeps track of which values address are defined in the current scope and what their LLVM representation is
+static std::map<std::string, AllocaInst *> NamedValues; 
 
 static std::unique_ptr<legacy::FunctionPassManager> TheFPM;
 static std::unique_ptr<KaleidoscopeJIT> TheJIT;

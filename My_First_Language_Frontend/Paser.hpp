@@ -48,6 +48,7 @@ public:
 	VariableExprAST(const std::string &Name) : Name(Name) {}
 
 	Value * codegen() override;
+	const std::string & getName() const { return Name; }
 };
 
 
@@ -63,6 +64,19 @@ public:
 	Value * codegen() override;
 };
 
+
+// VarExprAST, for var/in
+class VarExprAST : public ExprAST{
+	std::vector<std::pair<std::string, std::unique_ptr<ExprAST>>> VarNames;
+	std::unique_ptr<ExprAST> Body;
+
+public:
+	VarExprAST(std::vector<std::pair<std::string, std::unique_ptr<ExprAST>>> _VarNames,
+					std::unique_ptr<ExprAST> _Body)
+		: VarNames(std::move(_VarNames)), Body(std::move(_Body)) {}
+
+	Value * codegen() override;
+};
 
 // IfExprAST, for if/then/else.
 class IfExprAST : public ExprAST{
