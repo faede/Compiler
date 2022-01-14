@@ -1,4 +1,4 @@
-#include "KaleidoscopeJIT.h"
+//#include "KaleidoscopeJIT.h"
 #include "llvm/ADT/APFloat.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/IR/BasicBlock.h"
@@ -31,7 +31,7 @@
 
 
 using namespace llvm;
-using namespace llvm::orc;
+//using namespace llvm::orc;
 
 #include "lexer.cpp"
 //#include "Paser.hpp"
@@ -135,7 +135,7 @@ static std::unique_ptr<ExprAST> ParseVarExpr(){
 		getNextToken(); // eat identifier
 
 		// read the optional initializer
-		std::unique_ptr<ExprAST> Init;
+		std::unique_ptr<ExprAST> Init = nullptr;
 		if(CurTok == '='){
 			getNextToken(); // eat '='
 
@@ -464,32 +464,11 @@ static std::unique_ptr<FunctionAST> ParseTopLevelExpr(){
 
 
 // Top-Level Parsing and JIT Driver
-void InitializeModuleAndPassManager(void){
-    // Open a new module
-    TheModule = std::make_unique<Module>("my cool jit", TheContext);
-    TheModule->setDataLayout(TheJIT->getTargetMachine().createDataLayout());
-
-    // create a pass manager
-    TheFPM = std::make_unique<legacy::FunctionPassManager>(TheModule.get());
-
-    // promote allocas to registers
-    TheFPM->add(createPromoteMemoryToRegisterPass());
-
-    // Do simple "peephole" optimizations and bit-twidding optzns
-    TheFPM->add(createInstructionCombiningPass());
-    
-    // Reassociate expressions
-    TheFPM->add(createReassociatePass());
-
-    // Eliminate Common SubExpressions
-    TheFPM->add(createGVNPass());
-
-    // Simplify the control flow graph (deleting unreachable blocks)
-    TheFPM->add(createCFGSimplificationPass());
-
-    TheFPM->doInitialization();
-
+static void InitializeModuleAndPassManager() {
+  // Open a new module.
+  TheModule = std::make_unique<Module>("my cool jit", TheContext);
 }
+
 
 /*
 
@@ -503,87 +482,63 @@ static void InitializeModule(){
 }
 */
 
-static void HandleDefinition(){
-	if(auto FnAST = ParseDefinition()){
-		if(auto *FnIR = FnAST->codegen()){
-			fprintf(stderr, "Read function definition:");
-			FnIR->print(errs());
-			fprintf(stderr, "\n");
-
-			TheJIT->addModule(std::move(TheModule));
-			InitializeModuleAndPassManager();
-		}
-	}else{
-		// Skip token for error recovery
-		getNextToken();
-	}
+static void HandleDefinition() {
+  if (auto FnAST = ParseDefinition()) {
+    if (auto *FnIR = FnAST->codegen()) {
+      fprintf(stderr, "Read function definition:");
+      FnIR->print(errs());
+      fprintf(stderr, "\n");
+    }
+  } else {
+    // Skip token for error recovery.
+    getNextToken();
+  }
 }
 
-static void HandleExtern(){
-	if(auto ProtoAST = ParseExtern()){
-		if(auto * FnIR = ProtoAST->codegen()){
-			fprintf(stderr, "Read extern: ");
-			FnIR->print(errs());
-			fprintf(stderr, "\n");
-			FunctionProtos[ProtoAST->getName()] = std::move(ProtoAST);
-		}
-	}else{
-		// Skip token for error recovery
-		getNextToken();
-	}
+static void HandleExtern() {
+  if (auto ProtoAST = ParseExtern()) {
+    if (auto *FnIR = ProtoAST->codegen()) {
+      fprintf(stderr, "Read extern: ");
+      FnIR->print(errs());
+      fprintf(stderr, "\n");
+      FunctionProtos[ProtoAST->getName()] = std::move(ProtoAST);
+    }
+  } else {
+    // Skip token for error recovery.
+    getNextToken();
+  }
 }
 
 
-static void HandleTopLevelExpression(){
-	// Evaluate a top-level expression into an anonymous function
-	if(auto FnAST = ParseTopLevelExpr()){
-		if(auto * FnIR = FnAST->codegen()){
-
-			// JIT
-			auto H = TheJIT->addModule(std::move(TheModule));
-
-			// Once the module has been added to the JIT it can no longer be modified, 
-			// so we also open a new module to hold subsequent code
-			InitializeModuleAndPassManager();
-
-			// search the JIT for the anonymous expression
-			auto ExprSymbol = TheJIT->findSymbol("__anon_expr");
-			assert(ExprSymbol && "Function not found");
-
-			// Get the symbol's address and cast it to the right type (takes no
-      		// arguments, returns a double) so we can call it as a native function
-			double (*FP)() = (double (*)())(intptr_t)cantFail(ExprSymbol.getAddress());
-			fprintf(stderr, "Evaluated to %f\n", FP());
-
-			// Remove the anonymous expression
-			TheJIT->removeModule(H);
-		}
-	}else{
-		// Skip token for error recovery
-		getNextToken();
-	}
+static void HandleTopLevelExpression() {
+  // Evaluate a top-level expression into an anonymous function.
+  if (auto FnAST = ParseTopLevelExpr()) {
+    FnAST->codegen();
+  } else {
+    // Skip token for error recovery.
+    getNextToken();
+  }
 }
 
 // top := definition | extern1 | expression | ';'
-static void MainLoop(){
-	while(1){
-		fprintf(stderr, "ready>");
-		switch(CurTok){
-			case tok_eof:
-				return ;
-			case ';': // ignore
-				getNextToken();
-				break;
-			case tok_def:
-				HandleDefinition();
-				break;
-			case tok_extern:
-				HandleExtern();
-				break;
-			default:
-				HandleTopLevelExpression();
-				break;
-		}
-	}
+static void MainLoop() {
+  while (true) {
+    switch (CurTok) {
+    case tok_eof:
+      return;
+    case ';': // ignore top-level semicolons.
+      getNextToken();
+      break;
+    case tok_def:
+      HandleDefinition();
+      break;
+    case tok_extern:
+      HandleExtern();
+      break;
+    default:
+      HandleTopLevelExpression();
+      break;
+    }
+  }
 }
 

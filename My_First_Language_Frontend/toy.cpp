@@ -72,18 +72,12 @@ int main(){
   fprintf(stderr, "ready>");
   getNextToken();
 
-
-  TheJIT = std::make_unique<KaleidoscopeJIT>();
-  
-
   InitializeModuleAndPassManager();
 
 
   // run
   MainLoop();
 
-  // print out all of the generated code
-  //TheModule->print(errs(), nullptr);
 
   // Initialize the target registry etc.
   InitializeAllTargetInfos();
@@ -126,7 +120,7 @@ int main(){
   }
 
   legacy::PassManager pass;
-  auto FileType = llvm::LLVMTargetMachine::CGFT_ObjectFile;
+  auto FileType = TargetMachine::CGFT_ObjectFile;
 
   if (TheTargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType)) {
     errs() << "TheTargetMachine can't emit a file of this type";

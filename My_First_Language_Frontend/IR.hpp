@@ -40,5 +40,5 @@ static std::unique_ptr<Module> TheModule; // contains functions and global varia
 static std::map<std::string, AllocaInst *> NamedValues; 
 
 static std::unique_ptr<legacy::FunctionPassManager> TheFPM;
-static std::unique_ptr<KaleidoscopeJIT> TheJIT;
+//static std::unique_ptr<KaleidoscopeJIT> TheJIT;
 static std::map<std::string, std::unique_ptr<PrototypeAST>> FunctionProtos; //  holds the most recent prototype for each function
