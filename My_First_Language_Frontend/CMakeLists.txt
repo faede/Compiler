@@ -49,10 +49,18 @@ target_link_libraries(toy libanswer ${llvm_libs})
 
     for some reason , cmake doesn't work
     using command:
-        clang++ -g toy.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -O3 -o toy
+        clang++ -g -O3 toy.cpp `llvm-config --cxxflags --ldflags --system-libs --libs all` -o toy
     to compile
 
+    $ ./toy
+    ready> def average(x y) (x + y) * 0.5;
+    ^D
+    Wrote output.o
 
+
+    $ clang++ main.cpp output.o -o main
+    $ ./main
+    average of 3.0 and 4.0: 3.5
 
     When you quit the current demo (by sending an EOF via CTRL+D on Linux or CTRL+Z and ENTER on Windows),
     it dumps out the IR for the entire module generated. 
