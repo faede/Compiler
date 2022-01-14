@@ -71,12 +71,26 @@ class IfExprAST : public ExprAST{
 public:
 	IfExprAST(std::unique_ptr<ExprAST> _Cond, std::unique_ptr<ExprAST> _Then,
 			  std::unique_ptr<ExprAST> _Else)
-		: Cond(std::move(_Cond)), Then(std::move(Then)), Else(std::move(_Else)){}
+		: Cond(std::move(_Cond)), Then(std::move(_Then)), Else(std::move(_Else)){}
 
 	Value * codegen() override;
-}
+};
 
 
+// ForExprAST, for for/in
+class ForExprAST : public ExprAST{
+	std::string VarName;
+	std::unique_ptr<ExprAST> Start, End, Step, Body;
+
+public:
+	ForExprAST(const std::string & _VarName, std::unique_ptr<ExprAST> _Start,
+			   std::unique_ptr<ExprAST> _End, std::unique_ptr<ExprAST> _Step,
+			   std::unique_ptr<ExprAST> _Body)
+		: VarName(_VarName), Start(std::move(_Start)), End(std::move(_End)),
+		  Step(std::move(_Step)), Body(std::move(_Body)) {}
+
+	Value * codegen() override;
+};
 
 
 // CallExprAST
@@ -170,9 +184,11 @@ static std::unique_ptr<FunctionAST> ParseDefinition();
 // external ::= 'extern' prototype
 static std::unique_ptr<PrototypeAST> ParseExtern();
 
+// ifexpr := 'if' expression 'then' expression 'else' expression
+static std::unique_ptr<ExprAST> ParseIfExpr();
 
-
-
+// forexpr ::= 'for' identifier '=' expr ',' expr (',' expr)? 'in' expression
+static std::unique_ptr<ExprAST> ParseForExpr();
 
 // toplevelexpr ::= expression
 static std::unique_ptr<FunctionAST> ParseTopLevelExpr();

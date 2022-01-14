@@ -6,6 +6,22 @@ cmake_minimum_required(VERSION 3.9)
 #SET (CMAKE_CXX_COMPILER "/usr/bin/clang++") # 填写绝对路径
 project(toy)
 
+find_package(LLVM REQUIRED CONFIG)
+
+message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+
+# Set your project compile flags.
+# E.g. if using the C++ header files
+# you will need to enable C++11 support for your compiler.
+
+include_directories(${LLVM_INCLUDE_DIRS})
+add_definitions(${LLVM_DEFINITIONS})
+
+llvm_map_components_to_libnames(llvm_libs support core irreader)
+
+
+
 # 添加 libanswer 库目标，STATIC 指定为静态库
 add_library(libanswer Paser.cpp Paser.hpp lexer.cpp lexer.hpp IR.cpp IR.hpp)
 
@@ -13,7 +29,7 @@ add_executable(toy toy.cpp)
 add_compile_options(-O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` )
 
 # 为 toy 可执行目标链接 libanswer
-target_link_libraries(toy libanswer)
+target_link_libraries(toy libanswer ${llvm_libs})
 
 #[[
 使用如下命令构建本项目：
