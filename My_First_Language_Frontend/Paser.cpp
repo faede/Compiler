@@ -6,6 +6,7 @@
 #include "llvm/IR/DerivedTypes.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/Instructions.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Module.h"
@@ -16,6 +17,7 @@
 #include "llvm/Transforms/InstCombine/InstCombine.h"
 #include "llvm/Transforms/Scalar.h"
 #include "llvm/Transforms/Scalar/GVN.h"
+#include "llvm/Transforms/Utils.h"
 #include <algorithm>
 #include <cassert>
 #include <cctype>
@@ -62,7 +64,7 @@ static std::unique_ptr<ExprAST> ParseNumberExpr(){
 	return std::move(Result);
 }
 
-// parenexpr := '(' expression ')'
+// parenexpr ::= '(' expression ')'
 static std::unique_ptr<ExprAST> ParseParenExpr(){
 	getNextToken(); // eat (
 
@@ -117,6 +119,54 @@ static std::unique_ptr<ExprAST> ParseIdentifierExpr(){
 	return std::make_unique<CallExprAST> (IdName, std::move(Args));
 }
 
+// varexpr ::= 'var' identifier ('=' expression)?
+// 					 (',' identifier ('=' expression)?)* 'in' expression
+static std::unique_ptr<ExprAST> ParseVarExpr(){
+	getNextToken(); // eat var
+
+	std::vector<std::pair<std::string, std::unique_ptr<ExprAST>>> VarNames;
+
+	// At least one variable name is required
+	if(CurTok != tok_identifier)
+		return LogError("Expected identifier after var");
+
+	while(1){
+		std::string Name = IdentifierStr;
+		getNextToken(); // eat identifier
+
+		// read the optional initializer
+		std::unique_ptr<ExprAST> Init;
+		if(CurTok == '='){
+			getNextToken(); // eat '='
+
+			Init = ParseExpression();
+			if(!Init)
+				return nullptr;
+		}
+
+		VarNames.push_back(std::make_pair(Name, std::move(Init)));
+
+		// End of var list, exit loop
+		if(CurTok != ',')
+			break;
+		getNextToken(); // eat ','
+
+		if(CurTok != tok_identifier)
+			return LogError("Expected identifier list after var");
+	}
+
+	// at this point, we have to have 'in' 
+	if(CurTok != tok_in)
+		return LogError("Expected 'in' keyword after 'var'");
+	getNextToken(); // eat 'in'
+
+	auto Body = ParseExpression();
+	if(!Body)
+		return nullptr;
+
+	return std::make_unique<VarExprAST> (std::move(VarNames), std::move(Body));
+}
+
 
 // primary
 // 	::= identifierexpr
@@ -137,6 +187,8 @@ static std::unique_ptr<ExprAST> ParsePrimary(){
 			return ParseIfExpr();
 		case tok_for:
 			return ParseForExpr();
+		case tok_var:
+			return ParseVarExpr();
 	}
 } 
 
@@ -419,6 +471,9 @@ void InitializeModuleAndPassManager(void){
 
     // create a pass manager
     TheFPM = std::make_unique<legacy::FunctionPassManager>(TheModule.get());
+
+    // promote allocas to registers
+    TheFPM->add(createPromoteMemoryToRegisterPass());
 
     // Do simple "peephole" optimizations and bit-twidding optzns
     TheFPM->add(createInstructionCombiningPass());
